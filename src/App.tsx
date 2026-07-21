@@ -26,7 +26,7 @@ function App() {
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
-    if (uiState.screen === 'playing' || uiState.screen === 'paused') {
+    if (uiState.screen === 'playing') {
       if (musicOn && audio.paused) audio.play().catch(() => {});
     } else {
       audio.pause();
@@ -91,7 +91,7 @@ function App() {
       </div>
 
       <div className="controls">
-        <button className="ctrl-btn" onClick={isPlaying ? pause : start}>
+        <button className="ctrl-btn" onClick={() => { if (uiState.screen === 'paused') pause(); else if (isPlaying) pause(); else start(); }}>
           {uiState.screen === 'paused' ? '继续' : isPlaying ? '暂停' : '开始游戏'}
         </button>
         <button className="ctrl-btn" onClick={restart}>
