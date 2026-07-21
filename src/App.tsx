@@ -11,7 +11,7 @@ import './App.css';
 const screensWithHUD = new Set(['playing', 'paused', 'levelComplete']);
 
 function App() {
-  const { canvasRef, uiState, start, pause, restart } = useGameEngine();
+  const { canvasRef, uiState, start, pause, restart, advanceLevel } = useGameEngine();
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [musicOn, setMusicOn] = useState(true);
 
@@ -67,7 +67,7 @@ function App() {
             level={uiState.level}
             score={uiState.score}
             lifeBonus={uiState.lifeBonusThisLevel}
-            onNext={start}
+            onNext={advanceLevel}
           />
         )}
 

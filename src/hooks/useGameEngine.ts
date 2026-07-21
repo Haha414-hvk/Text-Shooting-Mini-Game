@@ -52,6 +52,7 @@ export function useGameEngine() {
   const start = useCallback(() => engineRef.current?.start(), []);
   const pause = useCallback(() => engineRef.current?.pause(), []);
   const restart = useCallback(() => engineRef.current?.restart(), []);
+  const advanceLevel = useCallback(() => engineRef.current?.advanceLevel(), []);
 
-  return { canvasRef, uiState, start, pause, restart };
+  return { canvasRef, uiState, start, pause, restart, advanceLevel };
 }

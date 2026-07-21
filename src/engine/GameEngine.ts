@@ -338,6 +338,10 @@ export class GameEngine {
     if (gs.lives <= 0) { gs.lives = 0; gs.screen = 'gameOver'; }
   }
 
+  advanceLevel() {
+    this.gs.levelCompleteTimer = 999;
+  }
+
   private nextLevel() {
     const { gs } = this;
     if (gs.lifeBonusThisLevel) gs.lives++;
