@@ -1,3 +1,4 @@
+import { useRef, useEffect, useCallback, useState } from 'react';
 import { useGameEngine } from './hooks/useGameEngine';
 import { GameCanvas } from './components/GameCanvas';
 import { StartScreen } from './components/StartScreen';
@@ -11,6 +12,37 @@ const screensWithHUD = new Set(['playing', 'paused', 'levelComplete']);
 
 function App() {
   const { canvasRef, uiState, start, pause, restart } = useGameEngine();
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [musicOn, setMusicOn] = useState(true);
+
+  useEffect(() => {
+    const audio = new Audio('/bgm.m4a');
+    audio.loop = true;
+    audio.volume = 0.4;
+    audioRef.current = audio;
+    return () => { audio.pause(); audio.src = ''; };
+  }, []);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (uiState.screen === 'playing' || uiState.screen === 'paused') {
+      if (musicOn && audio.paused) audio.play().catch(() => {});
+    } else {
+      audio.pause();
+    }
+  }, [uiState.screen, musicOn]);
+
+  const toggleMusic = useCallback(() => {
+    setMusicOn((v) => {
+      const next = !v;
+      if (audioRef.current) {
+        if (next) audioRef.current.play().catch(() => {});
+        else audioRef.current.pause();
+      }
+      return next;
+    });
+  }, []);
 
   const isPlaying = uiState.screen === 'playing';
   const showHUD = screensWithHUD.has(uiState.screen);
@@ -64,6 +96,9 @@ function App() {
         </button>
         <button className="ctrl-btn" onClick={restart}>
           重新开始
+        </button>
+        <button className={'ctrl-btn' + (musicOn ? '' : ' muted')} onClick={toggleMusic}>
+          {musicOn ? '🔊 音乐' : '🔇 静音'}
         </button>
       </div>
 

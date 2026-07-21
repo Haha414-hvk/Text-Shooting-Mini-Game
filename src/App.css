@@ -201,6 +201,12 @@
   color: #44aaff;
 }
 
+.ctrl-btn.muted {
+  opacity: 0.5;
+  color: #666;
+  border-color: #444;
+}
+
 .ctrl-btn:disabled {
   opacity: 0.3;
   cursor: not-allowed;
