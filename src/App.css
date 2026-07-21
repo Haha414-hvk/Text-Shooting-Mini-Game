@@ -1,0 +1,209 @@
+.game-wrapper {
+  background: #111;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 40px rgba(0, 255, 136, 0.15);
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.canvas-area {
+  position: relative;
+  width: 800px;
+  height: 600px;
+}
+
+.canvas-area canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10, 10, 46, 0.85);
+  z-index: 10;
+  pointer-events: auto;
+}
+
+.hud {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 12px;
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  color: #fff;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.hud-left, .hud-right {
+  display: flex;
+  gap: 16px;
+}
+
+.hud-wave { color: #888; }
+.hud-boss { color: #ff4444; font-weight: bold; }
+.hud-hearts { color: #ff4466; }
+
+.title {
+  font-family: 'Courier New', monospace;
+  font-size: 52px;
+  color: #00ff88;
+  margin-bottom: 20px;
+}
+
+.menu-hint {
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  color: #888;
+  margin: 4px 0;
+}
+
+.complete-title {
+  font-family: 'Courier New', monospace;
+  font-size: 40px;
+  color: #00ff88;
+  margin-bottom: 12px;
+}
+
+.complete-score {
+  font-family: 'Courier New', monospace;
+  font-size: 22px;
+  color: #ffdd44;
+  margin-bottom: 16px;
+}
+
+.life-bonus {
+  font-family: 'Courier New', monospace;
+  font-size: 18px;
+  font-weight: bold;
+  color: #ff4466;
+  margin-bottom: 20px;
+}
+.life-bonus.miss {
+  color: #888;
+  font-weight: normal;
+}
+
+.gameover-title {
+  font-family: 'Courier New', monospace;
+  font-size: 44px;
+  color: #ff3344;
+  margin-bottom: 12px;
+}
+
+.gameover-stat {
+  font-family: 'Courier New', monospace;
+  font-size: 22px;
+  color: #fff;
+  margin: 4px 0;
+}
+
+.victory-title {
+  font-family: 'Courier New', monospace;
+  font-size: 48px;
+  color: #ffdd00;
+  margin-bottom: 8px;
+}
+
+.victory-stat {
+  font-family: 'Courier New', monospace;
+  font-size: 18px;
+  color: #aaa;
+  margin: 4px 0;
+}
+
+.leaderboard {
+  margin: 16px 0;
+}
+
+.leaderboard h3 {
+  font-family: 'Courier New', monospace;
+  font-size: 20px;
+  color: #ffdd00;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.leaderboard table {
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  color: #aaa;
+  border-collapse: collapse;
+}
+
+.leaderboard td {
+  padding: 2px 8px;
+}
+
+.leaderboard .rank { text-align: right; color: #666; }
+.leaderboard .name { text-align: left; }
+.leaderboard .score { text-align: right; }
+.leaderboard .date { text-align: left; color: #666; }
+.leaderboard .highlight td { color: #ffdd00; font-weight: bold; }
+
+.btn-primary {
+  font-family: 'Courier New', monospace;
+  font-size: 20px;
+  padding: 10px 32px;
+  border: 1px solid #0f8;
+  border-radius: 4px;
+  background: transparent;
+  color: #0f8;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 12px;
+}
+
+.btn-primary:hover {
+  background: #0f8;
+  color: #111;
+}
+
+.controls {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.ctrl-btn {
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  padding: 8px 24px;
+  border: 1px solid #444;
+  border-radius: 4px;
+  background: #1a1a2e;
+  color: #0f8;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ctrl-btn:hover:not(:disabled) {
+  background: #0f8;
+  color: #111;
+  border-color: #0f8;
+}
+
+.ctrl-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.hint {
+  color: #555;
+  font-size: 13px;
+  text-align: center;
+  margin-top: 8px;
+  font-family: 'Courier New', monospace;
+}
