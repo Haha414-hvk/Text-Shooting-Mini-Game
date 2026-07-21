@@ -431,12 +431,11 @@ export class GameEngine {
     return { x: gs.mouseX - s * 0.4, y: gs.mouseY - s * 0.4, w: s * 0.8, h: s * 0.8 };
   }
 
-  // ──── Render ────
+  // ──── Render (game field only — UI is handled by React) ────
 
   private render() {
     const ctx = this.ctx;
 
-    // Background
     ctx.fillStyle = '#0a0a2e';
     ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
     ctx.fillStyle = '#111122';
@@ -444,71 +443,9 @@ export class GameEngine {
       ctx.fillRect((i * 137 + 50) % CANVAS_W, (i * 251 + 30) % CANVAS_H, 1, 1);
     }
 
-    if (this.gs.screen === 'menu') {
-      this.drawMenu();
-      return;
+    if (this.gs.screen !== 'menu') {
+      this.drawEntities();
     }
-
-    this.drawHUD();
-    this.drawEntities();
-    this.drawOverlay();
-  }
-
-  private drawHUD() {
-    const { ctx, gs } = this;
-    const lv = this.levelConfig();
-
-    ctx.textBaseline = 'top';
-    ctx.font = '16px "Courier New", monospace';
-
-    ctx.textAlign = 'left';
-    ctx.fillStyle = '#ffffff';
-    ctx.fillText(`关卡 ${lv.id} / 10`, 12, 10);
-    ctx.fillStyle = '#888';
-    ctx.fillText(`第 ${gs.wave + 1} / ${lv.waves} 波`, 12, 32);
-    if (lv.bossWave === gs.wave + 1) {
-      ctx.fillStyle = '#ff4444';
-      ctx.fillText('⚠ BOSS 波', 12, 54);
-    }
-
-    if (this.isDoubleSuper()) {
-      ctx.fillStyle = '#44aaff';
-      ctx.font = 'bold 14px "Courier New", monospace';
-      ctx.textAlign = 'left';
-      ctx.fillText('✦ 无敌 ✦', 12, 76);
-    } else if (this.isSuperForm()) {
-      ctx.fillStyle = '#ffdd00';
-      ctx.font = 'bold 14px "Courier New", monospace';
-      ctx.textAlign = 'left';
-      ctx.fillText('⚡ 超级形态', 12, 76);
-    }
-
-    let puY = 10;
-    (['power', 'multi'] as const).forEach((key) => {
-      const pu = gs.powerups[key];
-      if (pu.active) {
-        const dtp = { power: { text: '[P]', color: '#ff8800' }, multi: { text: '[M]', color: '#44aaff' } }[key];
-        ctx.fillStyle = dtp.color;
-        ctx.textAlign = 'left';
-        ctx.font = 'bold 15px "Courier New", monospace';
-        const label = `${dtp.text} ${pu.timer.toFixed(1)}s`;
-        ctx.fillText(label, 160, puY);
-        const barW = 70;
-        const barX = 160 + ctx.measureText(label).width + 6;
-        ctx.fillStyle = '#333';
-        ctx.fillRect(barX, puY + 4, barW, 8);
-        ctx.fillStyle = dtp.color;
-        ctx.fillRect(barX, puY + 4, barW * (pu.timer / pu.duration), 8);
-        puY += 22;
-      }
-    });
-
-    ctx.textAlign = 'right';
-    ctx.fillStyle = '#ffffff';
-    ctx.font = '16px "Courier New", monospace';
-    ctx.fillText('❤'.repeat(Math.max(0, gs.lives)), CANVAS_W - 12, 10);
-    ctx.fillText(`得分 ${gs.score}`, CANVAS_W - 12, 32);
-    ctx.fillText(`连击 x${gs.combo}`, CANVAS_W - 12, 54);
   }
 
   private drawEntities() {
@@ -612,89 +549,5 @@ export class GameEngine {
     ctx.fillRect(e.x, by, e.w * (e.hp / e.maxHp), 5);
   }
 
-  private drawOverlay() {
-    const { ctx, gs } = this;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
 
-    if (gs.screen === 'levelComplete') {
-      ctx.fillStyle = 'rgba(0,0,0,0.6)';
-      ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
-      ctx.fillStyle = '#00ff88';
-      ctx.font = 'bold 40px "Courier New", monospace';
-      ctx.fillText(`关卡 ${this.levelConfig().id} 通过!`, CANVAS_W / 2, CANVAS_H / 2 - 50);
-      ctx.fillStyle = '#ffdd44';
-      ctx.font = '22px "Courier New", monospace';
-      ctx.fillText(`得分: ${gs.score}`, CANVAS_W / 2, CANVAS_H / 2);
-      const nextSize = PLAYER_BASE_SIZE + Math.min(gs.level + 1, 9) * PLAYER_GROWTH_PER_LEVEL;
-      ctx.fillStyle = '#0f8';
-      ctx.font = `bold ${nextSize}px "Courier New", monospace`;
-      ctx.fillText('▲', CANVAS_W / 2, CANVAS_H / 2 + 50);
-      if (gs.lifeBonusThisLevel) {
-        ctx.fillStyle = '#ff4466';
-        ctx.font = 'bold 18px "Courier New", monospace';
-        ctx.fillText('❤ 额外获得一条生命!', CANVAS_W / 2, CANVAS_H / 2 + 85);
-      } else {
-        ctx.fillStyle = '#888';
-        ctx.font = '14px "Courier New", monospace';
-        ctx.fillText('未获得生命奖励', CANVAS_W / 2, CANVAS_H / 2 + 85);
-      }
-    }
-
-    if (gs.screen === 'gameOver') {
-      ctx.fillStyle = 'rgba(0,0,0,0.75)';
-      ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
-      ctx.fillStyle = '#ff3344';
-      ctx.font = 'bold 44px "Courier New", monospace';
-      ctx.fillText('游戏结束', CANVAS_W / 2, CANVAS_H / 2 - 70);
-      ctx.fillStyle = '#fff';
-      ctx.font = '22px "Courier New", monospace';
-      ctx.fillText(`最终得分: ${gs.score}`, CANVAS_W / 2, CANVAS_H / 2 - 20);
-      ctx.fillText(`到达关卡: ${gs.level + 1} / 10`, CANVAS_W / 2, CANVAS_H / 2 + 12);
-      ctx.fillStyle = '#888';
-      ctx.font = '14px "Courier New", monospace';
-      ctx.fillText(`❤ 剩余 x${gs.lives}`, CANVAS_W / 2, CANVAS_H / 2 + 46);
-      ctx.font = '16px "Courier New", monospace';
-      ctx.fillText('点击"重新开始"再来一次', CANVAS_W / 2, CANVAS_H / 2 + 90);
-    }
-
-    if (gs.screen === 'victory') {
-      ctx.fillStyle = 'rgba(0,0,0,0.65)';
-      ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
-      ctx.fillStyle = '#ffdd00';
-      ctx.font = 'bold 48px "Courier New", monospace';
-      ctx.fillText('🎉 通关! 🎉', CANVAS_W / 2, CANVAS_H / 2 - 120);
-      ctx.fillStyle = '#fff';
-      ctx.font = '24px "Courier New", monospace';
-      ctx.fillText(`最终得分: ${gs.score}`, CANVAS_W / 2, CANVAS_H / 2 - 65);
-      ctx.fillStyle = '#0f8';
-      ctx.font = '14px "Courier New", monospace';
-      ctx.fillText(`最大连击: ${gs.maxCombo}  |  ❤ x${gs.lives}`, CANVAS_W / 2, CANVAS_H / 2 - 35);
-      ctx.fillStyle = '#ffdd00';
-      ctx.font = 'bold 56px "Courier New", monospace';
-      ctx.shadowColor = '#ffdd00';
-      ctx.shadowBlur = 25;
-      ctx.fillText('>>>>W<<<<', CANVAS_W / 2, CANVAS_H / 2 + 15);
-      ctx.shadowBlur = 0;
-    }
-  }
-
-  private drawMenu() {
-    const ctx = this.ctx;
-    ctx.fillText('文字打飞机', CANVAS_W / 2, CANVAS_H / 2 - 120);
-    ctx.fillStyle = '#ffdd00';
-    ctx.font = 'bold 24px "Courier New", monospace';
-    ctx.fillText('⚡ 超级形态', CANVAS_W / 2, CANVAS_H / 2 - 60);
-    ctx.fillStyle = '#ffcc00';
-    ctx.font = 'bold 28px "Courier New", monospace';
-    ctx.fillText('W', CANVAS_W / 2, CANVAS_H / 2 - 25);
-    ctx.fillStyle = '#888';
-    ctx.font = '16px "Courier New", monospace';
-    ctx.fillText('鼠标移动操控 · 自动发射攻击波', CANVAS_W / 2, CANVAS_H / 2 + 20);
-    ctx.fillText('拾取 [P]威力  [M]多重  进入超级形态', CANVAS_W / 2, CANVAS_H / 2 + 44);
-    ctx.fillText('共 10 关 · 每过一关 50% 概率增加生命', CANVAS_W / 2, CANVAS_H / 2 + 68);
-    ctx.fillStyle = '#0f8';
-    ctx.font = '20px "Courier New", monospace';
-    ctx.fillText('[ 点击"开始游戏" ]', CANVAS_W / 2, CANVAS_H / 2 + 110);
-  }
 }

@@ -195,6 +195,12 @@
   border-color: #0f8;
 }
 
+.pause-text {
+  font-family: 'Courier New', monospace;
+  font-size: 48px;
+  color: #44aaff;
+}
+
 .ctrl-btn:disabled {
   opacity: 0.3;
   cursor: not-allowed;

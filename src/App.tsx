@@ -7,28 +7,36 @@ import { GameOver } from './components/GameOver';
 import { Victory } from './components/Victory';
 import './App.css';
 
+const screensWithHUD = new Set(['playing', 'paused', 'levelComplete']);
+
 function App() {
   const { canvasRef, uiState, start, pause, restart } = useGameEngine();
+
+  const isPlaying = uiState.screen === 'playing';
+  const showHUD = screensWithHUD.has(uiState.screen);
 
   return (
     <div className="game-wrapper">
       <div className="canvas-area">
         <GameCanvas canvasRef={canvasRef} />
 
+        {showHUD && <HUD state={uiState} />}
+
+        {uiState.screen === 'paused' && (
+          <div className="overlay">
+            <div className="pause-text">⏸ 暂停</div>
+          </div>
+        )}
+
         {uiState.screen === 'menu' && <StartScreen onStart={start} />}
 
-        {uiState.screen === 'playing' && <HUD state={uiState} />}
-
         {uiState.screen === 'levelComplete' && (
-          <>
-            <HUD state={uiState} />
-            <LevelComplete
-              level={uiState.level}
-              score={uiState.score}
-              lifeBonus={uiState.lifeBonusThisLevel}
-              onNext={start}
-            />
-          </>
+          <LevelComplete
+            level={uiState.level}
+            score={uiState.score}
+            lifeBonus={uiState.lifeBonusThisLevel}
+            onNext={start}
+          />
         )}
 
         {uiState.screen === 'gameOver' && (
@@ -51,12 +59,8 @@ function App() {
       </div>
 
       <div className="controls">
-        <button
-          className="ctrl-btn"
-          onClick={uiState.screen === 'playing' ? pause : start}
-          disabled={uiState.screen === 'menu' || uiState.screen === 'victory' || uiState.screen === 'gameOver'}
-        >
-          {uiState.screen === 'paused' ? '继续' : '暂停'}
+        <button className="ctrl-btn" onClick={isPlaying ? pause : start}>
+          {uiState.screen === 'paused' ? '继续' : isPlaying ? '暂停' : '开始游戏'}
         </button>
         <button className="ctrl-btn" onClick={restart}>
           重新开始
