@@ -39,22 +39,56 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
-  padding: 10px 12px;
+  padding: 8px 12px;
   font-family: 'Courier New', monospace;
-  font-size: 16px;
+  font-size: 15px;
   color: #fff;
   pointer-events: none;
   z-index: 5;
 }
 
-.hud-left, .hud-right {
+.hud-left-col {
   display: flex;
-  gap: 16px;
+  flex-direction: column;
+  gap: 2px;
 }
 
-.hud-wave { color: #888; }
-.hud-boss { color: #ff4444; font-weight: bold; }
-.hud-hearts { color: #ff4466; }
+.hud-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.hud-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.hud-level { color: #fff; }
+.hud-wave { color: #888; font-size: 14px; }
+.hud-boss { color: #ff4444; font-weight: bold; font-size: 14px; }
+.hud-hearts { color: #ff4466; font-size: 16px; }
+.hud-combo { color: #ffdd44; font-size: 14px; }
+.hud-super { color: #ffdd00; font-size: 14px; font-weight: bold; }
+.hud-invincible { color: #44aaff; font-size: 14px; font-weight: bold; }
+
+.powerups-row { display: flex; gap: 12px; flex-wrap: wrap; }
+.powerup-item { display: flex; align-items: center; gap: 4px; }
+.powerup-label { font-size: 13px; font-weight: bold; }
+.powerup-bar-bg {
+  width: 60px;
+  height: 6px;
+  background: #333;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.powerup-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.1s linear;
+}
 
 .title {
   font-family: 'Courier New', monospace;
