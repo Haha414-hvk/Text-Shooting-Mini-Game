@@ -31,17 +31,34 @@ export function useGameEngine() {
     engine.init(canvasRef.current);
     engineRef.current = engine;
 
-    const handleMouseMove = (e: MouseEvent) => {
+    const getPos = (clientX: number, clientY: number) => {
       const rect = canvasRef.current!.getBoundingClientRect();
       const scaleX = 800 / rect.width;
       const scaleY = 600 / rect.height;
-      engine.setMouse(
-        (e.clientX - rect.left) * scaleX,
-        (e.clientY - rect.top) * scaleY
-      );
+      return { x: (clientX - rect.left) * scaleX, y: (clientY - rect.top) * scaleY };
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const { x, y } = getPos(e.clientX, e.clientY);
+      engine.setMouse(x, y);
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      e.preventDefault();
+      const t = e.touches[0];
+      const { x, y } = getPos(t.clientX, t.clientY);
+      engine.setMouse(x, y);
+    };
+
+    const handleTouchStart = (e: TouchEvent) => {
+      const t = e.touches[0];
+      const { x, y } = getPos(t.clientX, t.clientY);
+      engine.setMouse(x, y);
     };
 
     window.addEventListener('mousemove', handleMouseMove);
+    canvasRef.current.addEventListener('touchmove', handleTouchMove, { passive: false });
+    canvasRef.current.addEventListener('touchstart', handleTouchStart, { passive: true });
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       engine.destroy();
