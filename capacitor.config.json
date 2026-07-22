@@ -1,0 +1,8 @@
+{
+  "appId": "com.textshooter.game",
+  "appName": "Text Shooter",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  }
+}
