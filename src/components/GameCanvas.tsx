@@ -1,7 +1,8 @@
-import { RefObject, useEffect } from 'react';
+import { useEffect } from 'react';
+import type { RefObject } from 'react';
 
 interface Props {
-  canvasRef: RefObject<HTMLCanvasElement>;
+  canvasRef: RefObject<HTMLCanvasElement | null>;
 }
 
 export function GameCanvas({ canvasRef }: Props) {

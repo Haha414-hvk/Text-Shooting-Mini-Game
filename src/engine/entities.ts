@@ -1,5 +1,5 @@
 import type { Enemy, EnemyType, Drop, DropType, LevelConfig } from '../types';
-import { ENEMY_TYPES, CANVAS_W, CANVAS_H } from './config';
+import { ENEMY_TYPES, CANVAS_W } from './config';
 import { rand, randInt } from './physics';
 
 export function makeEnemy(
@@ -26,7 +26,7 @@ export function makeEnemy(
 }
 
 export function spawnWave(
-  level: number,
+  _level: number,
   levelConfig: LevelConfig,
   waveIndex: number
 ): Enemy[] {

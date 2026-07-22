@@ -1,5 +1,5 @@
 import type { Enemy } from '../types';
-import { CANVAS_W, CANVAS_H } from './config';
+import { CANVAS_W } from './config';
 
 export function updateEnemyAI(e: Enemy, dt: number): void {
   e.age += dt;

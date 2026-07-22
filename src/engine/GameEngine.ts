@@ -1,9 +1,8 @@
 import type {
-  GameState, UIState, Enemy, Projectile, EnemyProjectile,
-  Drop, Particle, LeaderboardEntry,
+  GameState, UIState, Enemy,
 } from '../types';
 import {
-  LEVELS, ENEMY_TYPES, DROP_TYPES, CANVAS_W, CANVAS_H,
+  LEVELS, CANVAS_W, CANVAS_H,
   PLAYER_BASE_SIZE, PLAYER_GROWTH_PER_LEVEL,
 } from './config';
 import { collides, rand, clamp } from './physics';
@@ -15,7 +14,6 @@ import { playPickup, playLevelComplete, playVictory } from './audio';
 export type StateChangeCallback = (uiState: UIState) => void;
 
 export class GameEngine {
-  private canvas!: HTMLCanvasElement;
   private ctx!: CanvasRenderingContext2D;
   private gs!: GameState;
   private lastTime = 0;
@@ -25,7 +23,6 @@ export class GameEngine {
   onStateChange: StateChangeCallback | null = null;
 
   init(canvas: HTMLCanvasElement) {
-    this.canvas = canvas;
     this.ctx = canvas.getContext('2d')!;
     this.resetState();
     this.emitState();

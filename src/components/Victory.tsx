@@ -1,4 +1,3 @@
-import type { LeaderboardEntry } from '../types';
 import { useLeaderboard } from '../hooks/useLeaderboard';
 import { useCallback, useEffect, useState } from 'react';
 
